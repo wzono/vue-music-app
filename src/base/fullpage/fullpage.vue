@@ -1,12 +1,10 @@
 <template>
-  <div>
-    搜索页面
-  </div>
+  $END$
 </template>
 
-<script>
+<script type="text/ecmascript-6">
   export default {
-    name: 'search'
+    name: 'fullpage'
   }
 </script>
 
