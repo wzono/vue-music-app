@@ -11,22 +11,26 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api/getSlider': {
-        target: 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg',
+      '/api/login': {
+        target: 'https://os.ncuos.com/api/user/token',
         changeOrigin: true,
         secure: false,
         pathRewrite: {
-          '^/api/getSlider': ''
+          '^/api/login': ''
         }
       },
-      '/api/getDiscList': {
-        target: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg',
-        bypass: function (req, res, proxyOptions) {
-          req.headers.referer = 'https://c.y.qq.com/'
-          req.headers.host = 'c.y.qq.com'
-        },
+      '/api/getAchievement': {
+        target: 'http://gpa.ncuos.com:8023/api/common/',
+        changeOrigin: true,
         pathRewrite: {
-          '^/api/getDiscList': ''
+          '^/api/getAchievement': ''
+        }
+      },
+      '/api/getName': {
+        target: 'https://os.ncuos.com/api/user/profile/index',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/getName': ''
         }
       }
     },

@@ -1,28 +1,36 @@
 <template>
   <div id="app">
-    <m-header></m-header>
-    <tab></tab>
-    <keep-alive> <!--将dom缓存到内存中-->
-      <router-view></router-view>
-    </keep-alive>
+    <!--<keep-alive> &lt;!&ndash;将dom缓存到内存中&ndash;&gt;-->
+    <router-view></router-view>
+    <!--</keep-alive>-->
   </div>
 </template>
 
 <script>
-  import MHeader from 'components/m-header/m-header'
-  import tab from 'components/tab/tab'
-
   export default {
-    name: 'app',
-    components: {
-      MHeader,
-      tab
-    }
+    name: 'app'
   }
 </script>
 
-<style lang="stylus" scoped>
-  @import 'common/stylus/variable.styl';
+<style lang="stylus">
+  @import 'common/stylus/variable.styl'
+  @import 'common/stylus/base.styl'
+  
+  @font-face {
+    font-family: 'xiari';
+    src: url('http://p242dj826.bkt.clouddn.com/font/summer.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @keyframes float
+    0%
+      transform translate3d(0,0,0)
+    50%
+      transform translate3d(0,-15px, 0)
+    100%
+      transform translate3d(0, 0, 0)
+    
   #app
-    color: $color-theme
+    height: 100%
 </style>

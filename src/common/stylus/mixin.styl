@@ -4,6 +4,10 @@ bg-image($url)
   @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
     background-image: url($url + "@3x.png")
 
+bg-options()
+  background-position center
+  background-repeat: no-repeat
+
 // 不换行
 no-wrap()
   text-overflow: ellipsis
@@ -20,3 +24,48 @@ extend-click()
     left: -10px
     right: -10px
     bottom: -10px
+
+// 绝对居中
+abs-center()
+  position: absolute
+  top: 50%
+  left: 50%
+  transform translate3d(-50%, -50%, 0)
+
+// flex居中
+flex-center()
+  display: flex
+  justify-content center
+  align-items center
+  flex-direction:column
+
+
+// 更改placeholder颜色
+placeholder-color($color)
+  ::webkit-input-placeholder
+    color: $color
+
+  :-moz-placehoder
+    color: $color
+
+  ::-moz-placeholder
+    color: $color
+
+  :-ms-input-placeholder
+    color: $color
+
+
+font-dpr($px)
+  font-size: unit($px/2, px)
+  [data-dpr = "2"] &
+    font-size: unit($px, px)
+  [data-dpr = "3"] &
+    font-size: unit($px * 3/2, px)
+
+bg-animate($name, $s_url, $e_url)
+  @keyframes {$name}
+    0%, 100%
+      bg-image($s_url)
+    50%
+      bg-image($e_url)
+
