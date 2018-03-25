@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" ref="test">
     <!-- 登录logo -->
     <div class="pic"></div>
     <!-- 右边小标题 -->
@@ -7,20 +7,28 @@
       <p>——专属于你的{{ year }}GPA报告</p>
     </div>
     <!-- 账户输入 -->
-    <div class="form">
+    <div class="form" ref="form">
       <!-- 账号 -->
       <div class="input-group input-user">
         <label for="username"></label>
-        <input type="number" id="username" placeholder="输入你的学号" v-model.number="username"/>
+        <div class="group">
+          <input type="number" id="username" placeholder="输入你的学号" v-model.number="username"/>
+          <span class="border-left"></span>
+          <span class="border-right"></span>
+        </div>
       </div>
-      
+
       <!-- 密码 -->
       <div class="input-group input-pwd">
         <label for="password"></label>
-        <input type="password" id="password" placeholder="输入云家园密码" v-model="password"/>
+        <div class="group">
+          <input type="password" id="password" placeholder="输入云家园密码" v-model="password"/>
+          <span class="border-left"></span>
+          <span class="border-right"></span>
+        </div>
       </div>
       <!-- 登录按钮 -->
-      <div class="button" @touchstart="handleData()"></div>
+      <div class="button" @click="handleData()"></div>
     </div>
     <!-- 版权 -->
     <div class="copyright" v-show="showCopyright">
@@ -30,20 +38,21 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import { login } from 'api/login'
-  import { Message, MessageBox, Loading } from 'element-ui'
-  import bus from 'common/js/eventBus'
-  
-  const ALERT_BOX_TITLE = '消息'
-  const ALERT_BOX_CONTENT = '大一的萌新还没有成绩哦，暂时不能查看呢'
-  
+  import { Toast, Indicator, MessageBox } from 'mint-ui'
+  import 'common/stylus/icon.styl'
+
+  const ALERT_BOX_TITLE = 'Sorry'
+  const ALERT_BOX_CONTENT = '大一的萌新还没有成绩哦，暂时不能查看呢~'
+
   export default {
     name: 'login',
     data () {
       return {
         username: '',
-        password: ''
+        password: '',
+        toastControl: ''
       }
     },
     methods: {
@@ -52,35 +61,31 @@
           username: this.username,
           password: this.password
         })
-        
+
         // loading的基础配置
         let options = {
-          fullscreen: false,
-          spinner: 'el-icon-loading',
-          text: '正在登陆中...',
-          background: 'rgba(0, 0, 0, .8)'
+          icon: 'snake',
+          text: '登陆中...'
         }
-        // 以服务的方式呼起loading
-        this.loadingInstance = Loading.service(options)
-        
+
+        this._showIndicator(options)
+
         login(data).then((res) => {
-          this.loadingInstance.close()
+          this._closeIndicator()
+          console.log(res)
           if (res.status === 1) {
             // 登陆成功
             // eventBus分发登陆成功事件
-            bus.$emit('login', {
-              username: this.username,
-              token: res.token
-            })
-            this._showToast({msg: '登陆成功!', mold: 'success'})
+            this.$root.$bus.isMaster = true
             this.$router.push({ path: `/${this.username}` })
           } else {
             // 登陆失败
             this._showToast({msg: res.message, mold: 'error'})
           }
         }).catch((err) => {
-          this._showToast({msg: err, mold: 'error'})
-          this.loadingInstance.close()
+          console.log(err)
+          this._showToast({msg: '请求超时，请检查网络后重试', mold: 'error'})
+          this._closeIndicator()
         })
       },
       _verify () {
@@ -109,24 +114,28 @@
 
         return toast
       },
-      _showToast ({msg, mold}) {
-        Message({
-          type: mold,
-          message: msg,
-          duration: 2500,
-          center: true,
-          customClass: 'login-toast'
+      _showIndicator ({text, icon}) {
+        Indicator.open({
+          text: text,
+          spinnerType: icon
         })
       },
-      _showMsgBox ({msg, mold, title}) {
-        MessageBox.alert(msg, title, {
-          type: mold,
-          center: true,
-          customClass: 'login-msg-box',
-          confirmButtonText: '好吧',
-          roundButton: true,
-          showClose: false
+      _showToast ({msg, mold}) {
+        this.toastControl = Toast({
+          message: msg,
+          position: 'middle',
+          duration: 2000,
+          iconClass: `icon icon-${mold}`
         })
+      },
+      _showMsgBox ({msg, title}) {
+        MessageBox.alert(msg, title, {
+          closeOnClickModal: true,
+          confirmButtonText: '好吧'
+        })
+      },
+      _closeIndicator () {
+        Indicator.close()
       },
       handleData () {
         const msgBox = this._verify()
@@ -148,7 +157,6 @@
       this.year = new Date().getFullYear()
       this.height = document.body.scrollHeight
       this.showCopyright = true
-      this.loadingInstance = '' // 用于methods之间调用loading加载
 
       // 手机端呼出键盘，隐藏因为键盘而顶起的copyright
       window.addEventListener('resize', () => {
@@ -158,6 +166,13 @@
           this.showCopyright = true
         }
       })
+    },
+    beforeDestroy () {
+      console.log('[destory]')
+      if (this.toastControl) {
+        this.toastControl.close()
+      }
+      this._closeIndicator()
     }
   }
 </script>
@@ -166,10 +181,11 @@
   @import "~common/stylus/mixin"
   @import "~common/stylus/function"
   @import "~common/stylus/variable"
-  
+
   .login
     height: 100%
-    overflow-y: hidden
+    position: relative;
+    overflow: hidden
     .pic
       height: rem(390)
       margin-top: rem(141)
@@ -191,6 +207,7 @@
       .input-group
         position: relative
         display: inline-block
+        height: rem(86)
         label
           display inline-block
           width: rem(45)
@@ -198,18 +215,39 @@
           vertical-align middle
           margin-right: 5px
           position: relative;
-          top: 3px
+          top: -15px
           bg-options()
           background-size contain
-        input
-          height: rem(85)
-          width: rem(500)
-          border-bottom: 1px solid #ccc
-          font-dpr(30px)
-          text-indent: 5px
-          color: $color-text
-        input:focus
-          border-color: #44ceff
+
+        .group
+          display: inline-block
+          position: relative
+          overflow: hidden;
+          .border
+            &-left, &-right
+              position: absolute
+              display: inline-block
+              width: 0
+              height: 2px
+              background-color: #44ceff
+              bottom: 0
+              left: 50%
+              transition: all 0.5s;
+            &-right
+              transition: all 0.4s;
+          input
+            height: rem(85)
+            width: rem(500)
+            border-bottom: 1px solid #ccc
+            font-dpr(30px)
+            text-indent: 5px
+            color: $color-text
+          input:focus
+            & + span
+              width: 50%
+              transform: translateX(-100%);
+            & + span + span
+              width: 50%
       .input-user
         label
           bg-image('./images/user')

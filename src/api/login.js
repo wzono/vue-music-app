@@ -12,7 +12,7 @@ export function login ({username, password}) {
     url: url,
     method: 'post',
     data: data,
-    timeout: 4000
+    timeout: 20000
   }).then((res) => {
     return Promise.resolve(res.data)
   }).catch((err) => {

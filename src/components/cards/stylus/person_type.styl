@@ -1,11 +1,13 @@
-@import 'common/stylus/variable'
-@import 'common/stylus/mixin'
+@import '~common/stylus/variable'
+@import '~common/stylus/mixin'
 
 .dfw
   .title
     color: $color-dfw
   .board-top
-    background-color: $color-dfw
+    background-color: $color-bg-dfw
+    .image 
+      bg-image('~images/dfw')
     ul
       li
         color: $color-dfw
@@ -14,5 +16,66 @@
       color: $color-dfw
   .share
     .share-button
-      bg-image('../images/share-dfw')
-      background-size contain
+      bg-image('~images/share-dfw')
+  footer
+    .icon
+      bg-image('~images/icon-dfw')
+.lfw
+  .title
+    color: $color-lfw
+  .board-top
+    background-color: $color-bg-lfw
+    .image 
+      bg-image('~images/lfw')
+    ul
+      li
+        color: $color-lfw
+  .board-bottom
+    .value
+      color: $color-lfw
+  .share
+    .share-button
+      bg-image('~images/share-lfw')
+  footer
+    .icon
+      bg-image('~images/icon-lfw')
+
+.xxs
+  .title
+    color: $color-xxs
+  .board-top
+    background-color: $color-bg-xxs
+    .image 
+      bg-image('~images/xxs')
+    ul
+      li
+        color: $color-xxs
+  .board-bottom
+    .value
+      color: $color-xxs
+  .share
+    .share-button
+      bg-image('~images/share-xxs')
+  footer
+    .icon
+      bg-image('~images/icon-xxs')    
+
+.xz
+  .title
+    color: $color-xz
+  .board-top
+    background-color: $color-bg-xz
+    .image 
+      bg-image('~images/xz')
+    ul
+      li
+        color: $color-xz
+  .board-bottom
+    .value
+      color: $color-xz
+  .share
+    .share-button
+      bg-image('~images/share-xz')
+  footer
+    .icon
+      bg-image('~images/icon-xz')

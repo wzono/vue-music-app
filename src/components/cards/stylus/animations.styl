@@ -1,0 +1,84 @@
+@keyframes bounce-down
+  0%, 100%
+    transform: translate3d(0, 0, 0)
+  50%
+    transform: translate3d(0, 25px, 0)
+
+@keyframes twinkling
+  0
+    opacity: 1;
+  50%
+    opacity: 0;
+
+@keyframes wifi-emit {
+  15% {
+    width: 15px;
+    height: 15px;
+    background-position: -28px -40px;
+    top: 40px;
+    left: 30px;
+  }
+  40% {
+    width: 35px;
+    height: 30px;
+    background-position: -19px -25px;
+    top: 25px;
+    left: 21px;
+  }
+  65% {
+    width: 55px;
+    height: 45px;
+    top: 10px;
+    left: 12px;
+    background-position: -10px -10px;
+  }
+  90% {
+    top: 0;
+    left: 0;
+    width: 76px;
+    height: 54px;
+    background-position: 2px 0px;
+  }
+}
+
+.pages:nth-of-type(1)
+  .page-image
+    .moving-item
+      animation: float 2s infinite ease-in-out
+
+.pages:nth-of-type(2)
+  .page-image
+    .moving-item
+      animation: float 2s infinite ease-in-out
+
+.page-wrapper
+  .pages:nth-of-type(3)
+    .page-image
+      .moving-item
+        animation: twinkling 1s infinite step-start both
+.page-wrapper
+  .pages:nth-of-type(4)
+    .page-image
+      .out
+        position: relative;
+        width: 76px;
+        height: 54px;
+        top: rem(90);
+        left: rem(110);
+        transform: scale3d(0.5, 0.5, 1)
+        .moving-item
+          position: absolute;
+          border-radius: 100%;
+          width: 76px;
+          height: 54px;
+          background-position: 2px 0px;
+          background-size: auto;
+          background-image: url('~images/6.2@2x.png') !important;
+          top: 0;
+          left: 0;
+          animation: wifi-emit 2500ms infinite step-start both
+
+.pages:nth-of-type(6)
+  .page-image
+    .moving-item
+      animation: bounce-down 2s infinite ease-in-out

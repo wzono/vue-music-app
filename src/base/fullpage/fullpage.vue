@@ -3,7 +3,7 @@
     <div class="page-group" ref="pageGroups">
       <slot></slot>
     </div>
-    <div class="arrow">
+    <div class="arrow" v-show="icon">
       <span class="icon"></span>
     </div>
   </div>
@@ -17,7 +17,8 @@
     name: 'full-page',
     data () {
       return {
-        currentPageIndex: 0
+        currentPageIndex: 0,
+        icon: true
       }
     },
     props: {
@@ -70,17 +71,21 @@
             loop: false, // 是否无缝循环
             threshold: 0.3,
             speed: 800
-          }
+          },
+          click: true
         })
 
+        this.fullPage.on('scrollEnd', () => {
+          this.currentPageIndex = this.fullPage.getCurrentPage().pageY
+          this.icon = this.currentPageIndex !== this.children.length - 1
+        })
         // this.slider.on('scrollEnd', this._onScrollEnd) // 监听滚动结束时，调用回调函数 this._onScrollEnd
         //
         // this.slider.on('touchEnd', () => { // 监听触摸结束
         //
         // })
         //
-        // this.slider.on('beforeScrollStart', () => { // 监听滚动开始
-        //
+        // this.fullPage.on('beforeScrollStart', () => { // 监听滚动开始
         // })
       }
     },
